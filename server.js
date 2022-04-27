@@ -1,13 +1,21 @@
+require('dotenv').config()
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
+require('./routes/auth.routes')(app);
+require('./routes/user.routes')(app);
 var corsOptions = {
   origin: "http://localhost:3000"
 };
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+const db = require("./models");
+const Role = db.role;
+db.sequelize.sync({force: true}).then(() => {
+  console.log('Drop and Resync Db');
+});
 app.get("/", (req, res) => {
   res.json({ message: "Bem-vindo ao aplicativo Alpha Edtech." });
 });
