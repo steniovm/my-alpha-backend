@@ -1,4 +1,24 @@
 {
   "name": "my-alpha-backend",
-  "packageManager": "yarn@3.2.0"
+  "packageManager": "yarn@3.2.0",
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "express": "^4.18.0"
+  },
+  "description": "backend do projeto de React do alpha",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/steniovm/my-alpha-backend.git"
+  },
+  "author": "Stenio, Sergio, Luis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/steniovm/my-alpha-backend/issues"
+  },
+  "homepage": "https://github.com/steniovm/my-alpha-backend#readme"
 }
