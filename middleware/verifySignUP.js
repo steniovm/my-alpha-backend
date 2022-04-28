@@ -32,7 +32,7 @@ checkEmail = async (req, res, next) => {
 };
 checkBirthday = async (req, res, next) => {
   const birthday = req.body.birthday;
-  if(!birthday.match(/^\d{4}-\d{2}-\d{2}$/)){
+  if(!birthday.match(/^\d{4}\/\d{2}\/\d{2}$/)){
     return res.status(400).send({
       message: "Data de nascimento inválida!"
     });
