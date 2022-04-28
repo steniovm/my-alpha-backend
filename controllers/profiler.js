@@ -8,14 +8,14 @@ exports.insert = async (req, res) => {
     const {name, password, birthday, email} = req.body;
     const hashedPassword = bcrypt.hashSync(password, 8);
     const {rows} = await db.query(
-      "INSERT INTO users (email, password, name, birthday, uuid, access_level, created_by, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
-      [email, hashedPassword, name, birthday, req.uuid, req.access_level, req.user_id, new Date()]
+      `INSERT INTO users (email, password, name, birthday, uuid, access_level, created_by, created_at) VALUES ($1, $2, $3, to_timestamp(${new Date(birthday).getTime()} / 1000), $4, $5, $6, to_timestamp(${Date.now()} / 1000.0)) RETURNING *`,
+      [email, hashedPassword, name, req.uuid, req.access_level, req.user_id]
     );
     res.status(201).send({
       message: "Usuário criado com sucesso!",
       name: rows[0].name,
       birthday: rows[0].birthday,
-      email: rows[0].email
+      email: rows[0].email,
     });
   } catch(e) {
     res.status(500).send({
