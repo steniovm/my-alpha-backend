@@ -1,3 +1,4 @@
+require('dotenv').config()
 module.exports = {
-    secret: "Backend_Secret_Key"
+    secret: process.env.SECRET
   };
