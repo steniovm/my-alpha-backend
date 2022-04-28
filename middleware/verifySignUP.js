@@ -1,37 +1,18 @@
-const db = require("../models");
-const ROLES = db.ROLES;
-const User = db.user;
-checkDuplicateEmail = (req, res, next) => {
-  User.findOne({
-    where: {
-      username: req.body.email
-    }
-  }).then(user => {
-    if (user) {
-      res.status(400).send({
-        message: "Failed! Email is already in use!"
-      });
-      return;
-    }
-    next();
-  });
-};
-checkRolesExisted = (req, res, next) => {
-  if (req.body.roles) {
-    for (let i = 0; i < req.body.roles.length; i++) {
-      if (!ROLES.includes(req.body.roles[i])) {
-        res.status(400).send({
-          message: "Failed! Role does not exist = " + req.body.roles[i]
-        });
-        return;
-      }
-    }
+const db = require("../config/db.config.js");
+checkDuplicateEmail = async (req, res, next) => {
+  const email = req.body.email;
+  const response = await db.query(
+    "SELECT * FROM users WHERE email = $1",
+    [email]
+  );
+  if (response.rows.length > 0) {
+    return res.status(400).send({
+      message: "Email already in use!"
+    });
   }
-  
   next();
 };
 const verifySignUp = {
   checkDuplicateEmail: checkDuplicateEmail,
-  checkRolesExisted: checkRolesExisted
-};
+ };
 module.exports = verifySignUp;

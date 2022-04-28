@@ -8,13 +8,6 @@ module.exports = function(app) {
     );
     next();
   });
-  app.post(
-    "/api/auth/signup",
-    [
-      verifySignUp.checkDuplicateEmail,
-      verifySignUp.checkRolesExisted
-    ],
-    user.signup
-  );
-  app.post("/api/auth/signin", user.signin);
+  app.post("/signup", verifySignUp.checkDuplicateEmail, user.insert);
+  app.post("/signin", user.validate);
 };
