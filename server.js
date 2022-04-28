@@ -1,18 +1,17 @@
-require('dotenv').config()
+require("dotenv").config()
 const express = require("express");
-const bodyParser = require("body-parser");
 const cors = require("cors");
+const authRoutes = require("./routes/auth.routes");
+const userRoutes = require("./routes/user.routes");
 const app = express();
-require('./routes/auth.routes')(app);
-require('./routes/user.routes')(app);
-var corsOptions = {
-  origin: "http://localhost:3000"
-};
-app.use(cors(corsOptions));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.json({ type: 'application/vnd.api+json' }))
+app.use(cors());
+app.use('/auth', authRoutes);
+app.use('/user', userRoutes);
 app.get("/", (req, res) => {
-  res.json({ message: 'Bem-vindo ao aplicativo Alpha Edtech.' });
+  res.json({ message: "Bem-vindo ao aplicativo Alpha Edtech." });
 });
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {

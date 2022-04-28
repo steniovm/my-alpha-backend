@@ -3,12 +3,13 @@ const config = require("../config/auth.config");
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 exports.insert = async (req, res) => {
-  const {name, password, birthdate, email} = req.body;
-  const hashedPassword = bcrypt.hashSync(password, 8);
+  console.log(req)
   try{
+    const {name, password, birthday, email} = req.body;
+    const hashedPassword = bcrypt.hashSync(password, 8);
     const {rows} = await db.query(
-      'INSERT INTO users (name, password, birthdate, email, create_by, create_at) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
-      [name, hashedPassword, birthdate, email, req.user.id, new Date()]
+      "INSERT INTO users (name, password, birthday, email, create_by, create_at) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id",
+      [name, hashedPassword, birthday, email, req.user.id, new Date()]
     );
     res.status(201).send({
       message: "Usuário criado com sucesso!",
@@ -24,7 +25,7 @@ exports.validate = async (req, res) => {
   const {email, password} = req.body;
   try{
     const {rows} = await db.query(
-      'SELECT * FROM users WHERE email = $1',
+      "SELECT * FROM users WHERE email = $1",
       [email]
     );
     if(rows.length === 0) {
@@ -54,4 +55,3 @@ exports.validate = async (req, res) => {
     });
   }
 };
-

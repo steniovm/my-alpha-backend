@@ -13,6 +13,6 @@ checkDuplicateEmail = async (req, res, next) => {
   next();
 };
 const verifySignUp = {
-  checkDuplicateEmail: checkDuplicateEmail,
+  checkDuplicateEmail: checkDuplicateEmail
  };
 module.exports = verifySignUp;
