@@ -8,12 +8,14 @@ exports.insert = async (req, res) => {
     const {name, password, birthday, email} = req.body;
     const hashedPassword = bcrypt.hashSync(password, 8);
     const {rows} = await db.query(
-      "INSERT INTO users (name, password, birthday, email, create_by, create_at) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id",
-      [name, hashedPassword, birthday, email, req.user.id, new Date()]
+      "INSERT INTO users (email, password, name, birthday, uuid, access_level, created_by, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
+      [email, hashedPassword, name, birthday, req.uuid, req.access_level, req.user_id, new Date()]
     );
     res.status(201).send({
       message: "Usuário criado com sucesso!",
-      user: rows[0]
+      name: rows[0].name,
+      birthday: rows[0].birthday,
+      email: rows[0].email
     });
   } catch(e) {
     res.status(500).send({
@@ -42,7 +44,8 @@ exports.validate = async (req, res) => {
         res.status(200).send({
           message: "Usuário autenticado com sucesso!",
           token: token,
-          user: user
+          email: user.email,
+          birthday: user.birthday
         });
       } else {
         res.status(401).send({
