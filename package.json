@@ -11,5 +11,22 @@
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4"
-  }
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "description": "backend do projeto de React do alpha",
+  "version": "1.0.0",
+  "main": "server.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/steniovm/my-alpha-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/steniovm/my-alpha-backend/issues"
+  },
+  "homepage": "https://github.com/steniovm/my-alpha-backend#readme"
 }
