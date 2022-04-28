@@ -13,20 +13,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 const db = require("./models");
 const Role = db.role;
-db.sequelize.sync({force: true}).then(() => {
-  console.log('Drop and Resync Db');
-  initial();
+db.sequelize.sync().then(() => {
+  console.log("This creates the table if it doesn't exist");
 });
-function initial() {
-  Role.create({
-    id: 1,
-    name: "user"
-  });
-   Role.create({
-    id: 2,
-    name: "admin"
-  });
-}
 app.get("/", (req, res) => {
   res.json({ message: "Bem-vindo ao aplicativo Alpha Edtech." });
 });
@@ -34,4 +23,3 @@ const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
-
