@@ -14,6 +14,13 @@ app.get("/", (req, res) => {
   res.json({ message: "Bem-vindo ao aplicativo Alpha Edtech." });
 });
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
+require('dns').lookup(require('os').hostname(), function (err, add, fam) {
+  app.listen(PORT, () =>{
+      console.log(`Server is running on: http://${add}:${PORT}`);
+      //console.log(err);
+      //console.log(fam);
+  });
 });
+/*app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}.`);
+});*/
