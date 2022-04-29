@@ -2,6 +2,8 @@ const db = require("../config/db.config.js");
 const config = require("../config/auth.config");
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
+var crypto = require('crypto')
+
 exports.insert = async (req, res) => {
   console.log(req)
   try{
@@ -9,7 +11,7 @@ exports.insert = async (req, res) => {
     const hashedPassword = bcrypt.hashSync(password, 8);
     const {rows} = await db.query(
       `INSERT INTO users (email, password, name, birthday, uuid, access_level, created_by, created_at) VALUES ($1, $2, $3, to_timestamp(${new Date(birthday).getTime()} / 1000), $4, $5, $6, to_timestamp(${Date.now()} / 1000.0)) RETURNING *`,
-      [email, hashedPassword, name, req.uuid, req.access_level, req.user_id]
+      [email, hashedPassword, name, crypto.randomUUID(), 0, 0]
     );
     res.status(201).send({
       message: "Usuário criado com sucesso!",

@@ -5,6 +5,7 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.0",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "dotenv": "^16.0.0",
     "express": "^4.18.0",
     "express-promise-router": "^4.1.1",
@@ -18,7 +19,6 @@
   "description": "backend do projeto de React do alpha",
   "version": "1.0.0",
   "main": "server.js",
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/steniovm/my-alpha-backend.git"

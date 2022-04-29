@@ -24,6 +24,7 @@ checkPassword = async (req, res, next) => {
 checkEmail = async (req, res, next) => {
   const email = req.body.email;
   if(!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)){
+    console.log(email);
     return res.status(400).send({
       message: "Email inválido!"
     });
@@ -33,6 +34,7 @@ checkEmail = async (req, res, next) => {
 checkBirthday = async (req, res, next) => {
   const birthday = req.body.birthday;
   if(!birthday.match(/^\d{4}\/\d{2}\/\d{2}$/)){
+    console.log(birthday);
     return res.status(400).send({
       message: "Data de nascimento inválida!"
     });
