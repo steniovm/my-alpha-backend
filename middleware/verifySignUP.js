@@ -2,7 +2,7 @@ const db = require("../config/db.config.js");
 checkDuplicateEmail = async (req, res, next) => {
   const email = req.body.email;
   const response = await db.query(
-    "SELECT * FROM users WHERE email = $1",
+    "SELECT * FROM users WHERE email = $1 AND deleted_at IS NULL",
     [email]
   );
   if (response.rows.length > 0) {

@@ -19,7 +19,7 @@ CREATE TABLE public.Users (
   OIDS=FALSE
 );
 
-CREATE FUNCTION checkemail() RETURNS trigger AS $$
+/* CREATE FUNCTION checkemail() RETURNS trigger AS $$
   BEGIN
 	IF EXISTS (SELECT * FROM public.Users AS users WHERE users.email=NEW.email AND ((users.deleted_at=NEW.deleted_at) OR (users.deleted_at IS NULL AND NEW.deleted_at IS NULL))) THEN
 		RAISE EXCEPTION SQLSTATE '90001' USING MESSAGE = 'Email já cadastrado!';
@@ -30,4 +30,4 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER checkemail
 BEFORE INSERT ON public.Users
 FOR EACH ROW
-EXECUTE PROCEDURE checkemail();
+EXECUTE PROCEDURE checkemail(); */
