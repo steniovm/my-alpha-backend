@@ -26,13 +26,35 @@ exports.insert = async (req, res) => {
 exports.delete = async (req, res) => {
   console.log(req)
   try{
-    const {idDelete, userComand} = req.body;
+    let userComand = 0;
+    const {idDelete} = req.body;
     const {rows} = await db.query(
-      "UPDATE public.enderecos_usuarios SET deleted_by=$1, deleted_at=$2 WHERE id=$3",
+      "UPDATE public.Users SET deleted_by=$1, deleted_at=$2 WHERE id=$3",
       [userComand, Date.now(), idDelete]
     );
     res.status(201).send({
       message: "Usuário deletado com sucesso!",
+    });
+  } catch(e) {
+    res.status(500).send({
+      message: e.message
+    });
+  }
+};
+exports.edit = async (req, res) => {
+  console.log(req)
+  try{
+    const {name, password, birthday, email} = req.body;
+    const hashedPassword = bcrypt.hashSync(password, 8);
+    const {rows} = await db.query(
+      `UPDATE public.Users (email, password, name, birthday, uuid, access_level, updated_by, updated_at) VALUES ($1, $2, $3, to_timestamp(${new Date(birthday).getTime()} / 1000), $4, $5, $6, to_timestamp(${Date.now()} / 1000.0)) RETURNING *`,
+      [email, hashedPassword, name, req.uuid, req.access_level, req.user_id]
+    );
+    res.status(201).send({
+      message: "Usuário editado com sucesso!",
+      name: rows[0].name,
+      birthday: rows[0].birthday,
+      email: rows[0].email,
     });
   } catch(e) {
     res.status(500).send({
