@@ -21,12 +21,13 @@ CREATE TABLE public.Users (
 
 CREATE FUNCTION checkemail() RETURNS trigger AS $$
   BEGIN
-	IF EXISTS (SELECT DISTINCT ON (email, deleted_at) * FROM public.Users) THEN
+	IF EXISTS (SELECT * FROM public.Users AS users WHERE users.email=NEW.email AND ((users.deleted_at=NEW.deleted_at) OR (users.deleted_at IS NULL AND NEW.deleted_at IS NULL))) THEN
 		RAISE EXCEPTION SQLSTATE '90001' USING MESSAGE = 'Email já cadastrado!';
 	END IF;
-    RETURN OLD;
+    RETURN NEW;
   END;
 $$ LANGUAGE plpgsql;
 CREATE TRIGGER checkemail
 BEFORE INSERT ON public.Users
+FOR EACH ROW
 EXECUTE PROCEDURE checkemail();
