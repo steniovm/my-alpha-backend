@@ -21,7 +21,9 @@ CREATE TABLE public.Users (
 
 CREATE FUNCTION checkemail() RETURNS trigger AS $$
   BEGIN
-    RAISE EXCEPTION SQLSTATE '90001' USING MESSAGE = 'my own error';
+	IF EXISTS (SELECT DISTINCT ON (email, deleted_at) * FROM public.Users) THEN
+		RAISE EXCEPTION SQLSTATE '90001' USING MESSAGE = 'Email já cadastrado!';
+	END IF;
     RETURN OLD;
   END;
 $$ LANGUAGE plpgsql;
