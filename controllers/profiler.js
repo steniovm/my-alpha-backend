@@ -23,6 +23,23 @@ exports.insert = async (req, res) => {
     });
   }
 };
+exports.delete = async (req, res) => {
+  console.log(req)
+  try{
+    const {idDelete, userComand} = req.body;
+    const {rows} = await db.query(
+      "UPDATE public.enderecos_usuarios SET deleted_by=$1, deleted_at=$2 WHERE id=$3",
+      [userComand, Date.now(), idDelete]
+    );
+    res.status(201).send({
+      message: "Usuário deletado com sucesso!",
+    });
+  } catch(e) {
+    res.status(500).send({
+      message: e.message
+    });
+  }
+};
 exports.validate = async (req, res) => {
   const {email, password} = req.body;
   try{
