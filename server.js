@@ -19,6 +19,10 @@ require('dns').lookup(require('os').hostname(), function (err, add, fam) {
       console.log(`Server is running on: http://${add}:${PORT}`);
       //console.log(err);
       //console.log(fam);
+      console.log('rotas funcionais:');
+      console.log('/user/teste (GET)');
+      console.log('/auth/signup (POST)');
+      console.log('/auth/signin (POST)');
   });
 });
 /*app.listen(PORT, () => {

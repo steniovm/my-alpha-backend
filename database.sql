@@ -6,7 +6,7 @@ CREATE TABLE public.Users (
 	"name" varchar(240) NOT NULL,
 	"birthday" DATE NOT NULL,
 	"photo" varchar(255),
-	"uuid" varchar(32) NOT NULL UNIQUE,
+	"uuid" varchar(64) NOT NULL UNIQUE,
 	"access_level" int,
 	"created_by" int NOT NULL,
 	"created_at" TIMESTAMP NOT NULL,
