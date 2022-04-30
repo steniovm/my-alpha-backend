@@ -21,6 +21,8 @@ require('dns').lookup(require('os').hostname(), function (err, add, fam) {
       //console.log(fam);
       console.log('rotas funcionais:');
       console.log('/user/teste (GET)');
+      console.log('/user/del (DELETE)');
+      console.log('/user/edit (PUT)');
       console.log('/auth/signup (POST)');
       console.log('/auth/signin (POST)');
   });
