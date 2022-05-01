@@ -1,12 +1,13 @@
-const { authJwt } = require("../middleware");
+const { authJwt, verifySignUp } = require("../middleware");
+
 const user = require("../controllers/profiler");
-const req = require("express/lib/request");
+//const req = require("express/lib/request");
 const router = require("express-promise-router")();
-router.delete("/del", user.delete);
-router.put("/edit", user.edit);
+router.delete("/del", authJwt.verifyToken, user.delete);
+router.put("/edit", [authJwt.verifyToken], user.edit);
 //router.put("/edit", [authJwt.checkPassword, authJwt.checkBirthday, authJwt.checkEmail, authJwt.checkDuplicateEmail], user.edit);
-router.get("/teste", (req, res) => {
-    res.json({ message: "testando." });
+router.get("/teste", authJwt.verifyToken, (req, res) => {
+    res.json({ message: `Testando ${req.user.email} ...` });
 });
 module.exports = router;
 

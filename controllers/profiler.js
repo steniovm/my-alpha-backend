@@ -2,7 +2,8 @@ const db = require("../config/db.config.js");
 const config = require("../config/auth.config");
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
-var crypto = require('crypto')
+var crypto = require('crypto');
+const authJwt = require("../middleware/authJwt.js");
 
 exports.insert = async (req, res) => {
   console.log(req)
@@ -25,14 +26,15 @@ exports.insert = async (req, res) => {
     });
   }
 };
+
 exports.delete = async (req, res) => {
-  console.log(req)
+  //console.log(req)
   try{
     let userComand = 0;
-    const {idDelete} = req.body;
+    const {id:userid} = req.user;
     const {rows} = await db.query(
-      "UPDATE public.Users SET deleted_by=$1, deleted_at=$2 WHERE id=$3",
-      [userComand, Date.now(), idDelete]
+      `UPDATE public.Users SET (deleted_by, deleted_at)=($1, to_timestamp($2 / 1000.0)) WHERE id=$3`,
+      [userid, Date.now(), userid]
     );
     res.status(201).send({
       message: "Usuário deletado com sucesso!",
@@ -43,20 +45,22 @@ exports.delete = async (req, res) => {
     });
   }
 };
+
 exports.edit = async (req, res) => {
-  console.log(req)
+  //console.log(req)
   try{
+    const {id:userid} = req.user;
     const {name, password, birthday, email} = req.body;
     const hashedPassword = bcrypt.hashSync(password, 8);
-    const {rows} = await db.query(
-      `UPDATE public.Users (email, password, name, birthday, uuid, access_level, updated_by, updated_at) VALUES ($1, $2, $3, to_timestamp(${new Date(birthday).getTime()} / 1000), $4, $5, $6, to_timestamp(${Date.now()} / 1000.0)) RETURNING *`,
-      [email, hashedPassword, name, req.uuid, req.access_level, req.user_id]
+    await db.query(
+      `UPDATE users SET (email, password, name, birthday, updated_by, updated_at)=($1, $2, $3, to_timestamp(${new Date(birthday).getTime()} / 1000), $4, to_timestamp(${Date.now()} / 1000.0)) WHERE id=$4;`,
+      [email, hashedPassword, name, userid]
     );
     res.status(201).send({
       message: "Usuário editado com sucesso!",
-      name: rows[0].name,
-      birthday: rows[0].birthday,
-      email: rows[0].email,
+      name: name,
+      birthday: birthday,
+      email: email,
     });
   } catch(e) {
     res.status(500).send({
@@ -64,6 +68,7 @@ exports.edit = async (req, res) => {
     });
   }
 };
+
 exports.validate = async (req, res) => {
   const {email, password} = req.body;
   try{
@@ -79,9 +84,7 @@ exports.validate = async (req, res) => {
       const user = rows[0];
       const match = await bcrypt.compare(password, user.password);
       if(match) {
-        const token = jwt.sign({id: user.id}, config.secret, {
-          expiresIn: 86400
-        });
+        const token = await authJwt.createToken(user.uuid, res);
         res.status(200).send({
           message: "Usuário autenticado com sucesso!",
           token: token,
