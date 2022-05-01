@@ -10,7 +10,11 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.json({ type: 'application/vnd.api+json' }))
-app.use(cors());
+app.use(cors({
+    origin:['*', "http://localhost:3000"],
+    methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
+    credentials: true
+}));
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.get("/", (req, res) => {
@@ -24,6 +28,7 @@ require('dns').lookup(require('os').hostname(), function (err, add, fam) {
       //console.log(fam);
       console.log('rotas funcionais:');
       console.log('/user/teste (GET)');
+      console.log('/user/data (GET)');
       console.log('/user/del (DELETE)');
       console.log('/user/edit (PUT)');
       console.log('/auth/signup (POST)');

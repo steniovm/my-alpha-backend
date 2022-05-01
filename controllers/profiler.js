@@ -69,6 +69,34 @@ exports.edit = async (req, res) => {
   }
 };
 
+exports.data = async (req, res) => {
+  try{
+    const {id:userid} = req.user;
+    const {rows} = await db.query(
+      "SELECT * FROM users WHERE id = $1",
+      [userid]
+    );
+    if(rows.length === 0) {
+      res.status(401).send({
+        message: "Usuário não encontrado!"
+      });
+    } else {
+      const user = rows[0];
+      res.status(200).send({
+        message: "Usuário retornou dados com sucesso!",
+        email: user.email,
+        name: user.name,
+        birthday: user.birthday,
+        photo: user.photo
+      });
+    }
+  } catch(e) {
+    res.status(500).send({
+      message: e.message
+    });
+  }
+};
+
 exports.validate = async (req, res) => {
   const {email, password} = req.body;
   try{
@@ -87,9 +115,7 @@ exports.validate = async (req, res) => {
         const token = await authJwt.createToken(user.uuid, res);
         res.status(200).send({
           message: "Usuário autenticado com sucesso!",
-          token: token,
-          email: user.email,
-          birthday: user.birthday
+          token: token
         });
       } else {
         res.status(401).send({

@@ -18,10 +18,12 @@ async function createToken (uuid, res)
   const token = jwt.sign({uuid: uuid}, config.secret);
   res.cookie('token', `${token}`, 
     { 
-        maxAge: 900000, 
-        //path: "http://localhost/",
+        maxAge: 900000,
+        //domain:"localhost",
+        //path: "http://localhost:3000",
+        //path:"/",
         sameSite: "None",
-        secure: false 
+        secure: false
     });
   return token;
 }
