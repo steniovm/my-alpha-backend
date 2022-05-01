@@ -1,0 +1,242 @@
+_type: export
+__export_format: 4
+__export_date: 2022-05-01T01:32:21.090Z
+__export_source: insomnia.desktop.app:v2022.3.0
+resources:
+  - _id: req_d0ee4a123c054648941cd88ab99736b8
+    parentId: fld_c502abb1901a4b97848dbda2fdd18fba
+    modified: 1651367981126
+    created: 1651187752602
+    url: "{{ _.host }}{{ _.register }}"
+    name: Criar
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"email":"luisgustavoczp@gmail.com",
+        	"password":"luis1234",
+        	"birthday":"1993/01/13",
+        	"name":"Luis Gustavo Cardoso"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_30f7ac6203df498ba3d65ae978dcf6e2
+    authentication: {}
+    metaSortKey: -1651187752602
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_c502abb1901a4b97848dbda2fdd18fba
+    parentId: wrk_8761872ccbd94bcfb224d06ba7085333
+    modified: 1651264660259
+    created: 1651264638889
+    name: Usuario Luis
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1651264638889
+    _type: request_group
+  - _id: wrk_8761872ccbd94bcfb224d06ba7085333
+    parentId: null
+    modified: 1651187503628
+    created: 1651187503628
+    name: my-react-backend.yaml
+    description: ""
+    scope: design
+    _type: workspace
+  - _id: req_81b9b0fc6ad34a16b350f99f6a4ae56b
+    parentId: fld_c502abb1901a4b97848dbda2fdd18fba
+    modified: 1651367902988
+    created: 1651264595166
+    url: "{{ _.host }}{{ _.login }}"
+    name: Login
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"email":"luisgustavoczp@gmail.com",
+        	"password":"luis1234"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_e3139ecd5c8a4f038d76e8216ad668cb
+    authentication: {}
+    metaSortKey: -1651187752552
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_ccad79d5eee04e399e8b86037ea12add
+    parentId: fld_c502abb1901a4b97848dbda2fdd18fba
+    modified: 1651368012428
+    created: 1651366838496
+    url: "{{ _.host }}{{ _.edit }}"
+    name: Edit
+    description: ""
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"email":"luisgustavoczp@gmail.com",
+        	"password":"luis1234",
+        	"birthday":"1993/01/13",
+        	"name":"Luis Gustavo Cardoso"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_30f7ac6203df498ba3d65ae978dcf6e2
+    authentication: {}
+    metaSortKey: -1650967203838
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_81118dbd48b04b43b265c325743476f4
+    parentId: fld_c502abb1901a4b97848dbda2fdd18fba
+    modified: 1651368520312
+    created: 1651368506057
+    url: "{{ _.host }}{{ _.delete }}"
+    name: Delete
+    description: ""
+    method: DELETE
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1650856929481
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_2ee8b0a3b5154523b1e38c735e73eb2a
+    parentId: fld_c502abb1901a4b97848dbda2fdd18fba
+    modified: 1651367278338
+    created: 1651364419381
+    url: "{{ _.host }}{{ _.teste }}"
+    name: Teste
+    description: ""
+    method: GET
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"email":"luisgustavoczp@gmail.com",
+        	"password":"luis1234"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_e3139ecd5c8a4f038d76e8216ad668cb
+    authentication: {}
+    metaSortKey: -1650746655124
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_59ec415803de41d48780ce385688781c
+    parentId: fld_c502abb1901a4b97848dbda2fdd18fba
+    modified: 1651264850634
+    created: 1651264808778
+    url: "{{ _.host }}{{ _.logout }}"
+    name: Logout
+    description: ""
+    method: POST
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1650305557696
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: env_f1768e50af715d6d8edbd05e95f685d92c13e425
+    parentId: wrk_8761872ccbd94bcfb224d06ba7085333
+    modified: 1651366877843
+    created: 1651187503634
+    name: Base Environment
+    data:
+      host: http://localhost:3001
+      register: /auth/signup
+      login: /auth/signin
+      logout: /auth/signout
+      teste: /user/teste
+      edit: /user/edit
+      delete: /user/del
+    dataPropertyOrder:
+      "&":
+        - host
+        - register
+        - login
+        - logout
+        - teste
+        - edit
+        - delete
+    color: null
+    isPrivate: false
+    metaSortKey: 1651187503634
+    _type: environment
+  - _id: jar_f1768e50af715d6d8edbd05e95f685d92c13e425
+    parentId: wrk_8761872ccbd94bcfb224d06ba7085333
+    modified: 1651367904097
+    created: 1651187503636
+    name: Default Jar
+    cookies:
+      - key: token
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiMWZjNTI4OGUtZmIyOC00NjJmLTk5YTYtM2ZlOWRmODRlMWZmIiwiaWF0IjoxNjUxMzY3OTA0fQ.ZMUAYGBfG6YfXIlMiLyr1YDl8KEF6-92K2jrMlf5onA
+        expires: 2022-05-01T01:33:24.000Z
+        maxAge: 900
+        domain: localhost
+        path: /
+        extensions:
+          - SameSite=None
+        hostOnly: true
+        creation: 2022-05-01T00:42:05.319Z
+        lastAccessed: 2022-05-01T01:18:24.097Z
+        id: "015243832739719299"
+    _type: cookie_jar
+  - _id: spc_b163e10cd55946058d1de41255cb9c5c
+    parentId: wrk_8761872ccbd94bcfb224d06ba7085333
+    modified: 1651264510308
+    created: 1651187503629
+    fileName: my-react-backend.yaml
+    contents: ""
+    contentType: yaml
+    _type: api_spec
