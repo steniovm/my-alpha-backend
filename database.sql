@@ -7,7 +7,7 @@ CREATE TABLE public.users (
 	"birthday" DATE NOT NULL,
 	"photo" integer,
 	"uuid" varchar(32) NOT NULL UNIQUE,
-	"access_level" int(10) NOT NULL,
+	"access_level" int NOT NULL,
 	"created_by" int NOT NULL,
 	"created_at" TIMESTAMP NOT NULL,
 	"updated_by" int,
@@ -18,8 +18,6 @@ CREATE TABLE public.users (
 ) WITH (
   OIDS=FALSE
 );
-
-
 
 CREATE TABLE public.user_photo (
 	"id" serial NOT NULL,
