@@ -1,8 +1,8 @@
 const db = require("../config/db.config.js");
 const config = require("../config/auth.config");
-var jwt = require("jsonwebtoken");
-var bcrypt = require("bcryptjs");
-var crypto = require('crypto');
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const crypto = require('crypto');
 const authJwt = require("../middleware/authJwt.js");
 
 exports.insert = async (req, res) => {
@@ -57,7 +57,7 @@ exports.edit = async (req, res) => {
     if(password){
       const hashedPassword = bcrypt.hashSync(password, 8);
       await db.query(
-        `UPDATE users SET (email, password, photo, name, birthday, updated_by, updated_at)=($1, $2, $3, to_timestamp(${new Date(birthday).getTime()} / 1000), $4, to_timestamp(${Date.now()} / 1000.0)) WHERE id=$4;`,
+        `UPDATE users SET (email, password, name, birthday, updated_by, updated_at)=($1, $2, $3, to_timestamp(${new Date(birthday).getTime()} / 1000), $4, to_timestamp(${Date.now()} / 1000.0)) WHERE id=$4;`,
         [email, hashedPassword, name, userid]
       );
     } else {

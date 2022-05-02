@@ -1,7 +1,7 @@
 const db = require("../config/db.config.js");
 const jwt = require("jsonwebtoken");
 const config = require("../config/auth.config.js");
-
+const crypto = require('crypto');
 const sessions = {};
 
 async function searchUUID (uuid)
@@ -18,7 +18,17 @@ async function searchUUID (uuid)
 
 async function createToken (uuid, res) 
 {
-  const token = jwt.sign({uuid: uuid}, config.secret);
+  if(!uuid){
+    return "";
+  }
+
+  //const sessionID = {id:session.id, uuid:session.useruuid};
+  const session = {id:crypto.randomUUID(), useruuid:uuid, startTime:new Date().toUTCString().split("T"[0])};
+  const tokenData = {id:session.id, userid:session.useruuid};
+  const token = jwt.sign(tokenData, config.secret);
+  console.log(session);
+  sessions[`${tokenData.id},${tokenData.userid}`] = session;
+  console.log(session, sessions);
   res.cookie('token', `${token}`, 
     { 
         maxAge: 900000,
@@ -29,6 +39,33 @@ async function createToken (uuid, res)
         secure: false
     });
   return token;
+}
+
+async function deleteToken (req, res) 
+{
+  if(!req.user){
+    res.status(401).send({
+      message: "Sessão não encontrada!"
+    });
+  }
+
+  const {uuid, sessionid} = req.user;
+  console.log(req.user);
+  delete sessions[`${sessionid},${uuid}`];
+  //console.log(session, sessions);
+  res.cookie('token', ``, 
+    { 
+        maxAge: 0,
+        //domain:"localhost",
+        //path: "http://localhost:3000",
+        //path:"/",
+        sameSite: "None",
+        secure: false
+    });
+
+  res.status(201).send({
+    message: "Logout feito com sucesso!"
+  });
 }
 
 async function verifyToken (req, res, next)
@@ -47,12 +84,16 @@ async function verifyToken (req, res, next)
         message: "Unauthorized!"
       });
     }
-    const user = await searchUUID(decoded.uuid);
-    if(user)
-    {
-      console.log(`Verified ${user.email}`);
-      req.user = user;
-      next();
+    const session = sessions[`${decoded.id},${decoded.userid}`];
+    if(session) {
+      const user = await searchUUID(session.useruuid);
+      if(user)
+      {
+        console.log(`Verified ${user.email}`);
+        user.sessionid = session.id;
+        req.user = user;
+        next();
+      }
     }
   });
 };
@@ -60,5 +101,6 @@ async function verifyToken (req, res, next)
 module.exports = {
   verifyToken,
   createToken,
+  deleteToken,
   searchUUID
 };

@@ -32,8 +32,10 @@ require('dns').lookup(require('os').hostname(), function (err, add, fam) {
       console.log('/user/data (GET)');
       console.log('/user/del (DELETE)');
       console.log('/user/edit (PUT)');
+      console.log('/user/editPhoto (PUT)');
       console.log('/auth/signup (POST)');
       console.log('/auth/signin (POST)');
+      console.log('/auth/signout (POST)')
   });
 });
 /*app.listen(PORT, () => {
