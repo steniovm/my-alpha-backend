@@ -5,6 +5,16 @@ const bcrypt = require("bcryptjs");
 const crypto = require('crypto');
 const authJwt = require("../middleware/authJwt.js");
 
+/**
+ * Resize a base 64 Image
+ * @param {Date} odate - The base64 string (must include MIME type)
+ */
+function ajustDate (odate)
+{
+  console.log(odate.toLocaleDateString())
+  return odate.toISOString().split("T")[0]
+}
+
 exports.insert = async (req, res) => {
   console.log(req)
   try{
@@ -32,6 +42,7 @@ exports.delete = async (req, res) => {
   try{
     let userComand = 0;
     const {id:userid} = req.user;
+    await authJwt.deleteToken(req, res);
     const {rows} = await db.query(
       `UPDATE public.Users SET (deleted_by, deleted_at)=($1, to_timestamp($2 / 1000.0)) WHERE id=$3`,
       [userid, Date.now(), userid]
@@ -57,12 +68,12 @@ exports.edit = async (req, res) => {
     if(password){
       const hashedPassword = bcrypt.hashSync(password, 8);
       await db.query(
-        `UPDATE users SET (email, password, name, birthday, updated_by, updated_at)=($1, $2, $3, to_timestamp(${new Date(birthday).getTime()} / 1000), $4, to_timestamp(${Date.now()} / 1000.0)) WHERE id=$4;`,
+        `UPDATE users SET (email, password, name, birthday, updated_by, updated_at)=($1, $2, $3, to_timestamp(${new Date(birthday).getTime()+(1000*60*60*24)} / 1000), $4, to_timestamp(${Date.now()} / 1000.0)) WHERE id=$4;`,
         [email, hashedPassword, name, userid]
       );
     } else {
       await db.query(
-        `UPDATE users SET (email, name, birthday, updated_by, updated_at)=($1, $2, to_timestamp(${new Date(birthday).getTime()} / 1000), $3, to_timestamp(${Date.now()} / 1000.0)) WHERE id=$3;`,
+        `UPDATE users SET (email, name, birthday, updated_by, updated_at)=($1, $2, to_timestamp(${new Date(birthday).getTime()+(1000*60*60*24)} / 1000), $3, to_timestamp(${Date.now()} / 1000.0)) WHERE id=$3;`,
         [email, name, userid]
       );
     }
@@ -70,8 +81,7 @@ exports.edit = async (req, res) => {
       message: "Usuário editado com sucesso!",
       name: name,
       birthday: birthday,
-      email: email,
-      photo: photo
+      email: email
     });
   } catch(e) {
     res.status(500).send({
@@ -119,7 +129,7 @@ exports.view = async (req, res) => {
         message: "Usuário retornou dados com sucesso!",
         email: user.email,
         name: user.name,
-        birthday: user.birthday.toISOString().split("T")[0],
+        birthday: ajustDate(user.birthday),
         photo: user.photo
       });
     }
