@@ -34,6 +34,15 @@ checkPassword = async (req, res, next) => {
   }
   next();
 };
+checkUpdatePassword = async (req, res, next) => {
+  const password = req.body.password;
+  if(password && (password.length != 8 || !password.match(/\d/))){
+    return res.status(400).send({
+      message: "A senha deve ter 8 caracteres e conter pelo menos um número!"
+    });
+  }
+  next();
+};
 checkEmail = async (req, res, next) => {
   const email = req.body.email;
   if(!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)){
@@ -59,6 +68,7 @@ const verifySignUp = {
   checkPassword: checkPassword,
   checkEmail: checkEmail,
   checkBirthday: checkBirthday,
-  checkUpdateEmail
+  checkUpdateEmail,
+  checkUpdatePassword
  };
 module.exports = verifySignUp;
