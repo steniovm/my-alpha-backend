@@ -102,7 +102,7 @@ exports.validate = async (req, res) => {
   const {email, password} = req.body;
   try{
     const {rows} = await db.query(
-      "SELECT * FROM users WHERE email = $1",
+      "SELECT * FROM users WHERE email = $1 AND deleted_at IS NOT NULL",
       [email]
     );
     if(rows.length === 0) {

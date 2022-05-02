@@ -2,11 +2,13 @@ const db = require("../config/db.config.js");
 const jwt = require("jsonwebtoken");
 const config = require("../config/auth.config.js");
 
+const sessions = {};
+
 async function searchUUID (uuid)
 {
   console.log(`Searching ${uuid}...`)
   const {rows} = await db.query(
-    "SELECT * FROM users WHERE uuid = $1",
+    "SELECT * FROM users WHERE uuid = $1 AND deleted_at IS NOT NULL",
     [uuid]
   );
   console.log(`Found ${rows.length}!`);
