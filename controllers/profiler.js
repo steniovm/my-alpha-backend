@@ -50,17 +50,18 @@ exports.edit = async (req, res) => {
   //console.log(req)
   try{
     const {id:userid} = req.user;
-    const {name, password, birthday, email} = req.body;
+    const {name, password, birthday, email, photo} = req.body;
     const hashedPassword = bcrypt.hashSync(password, 8);
     await db.query(
-      `UPDATE users SET (email, password, name, birthday, updated_by, updated_at)=($1, $2, $3, to_timestamp(${new Date(birthday).getTime()} / 1000), $4, to_timestamp(${Date.now()} / 1000.0)) WHERE id=$4;`,
-      [email, hashedPassword, name, userid]
+      `UPDATE users SET (email, password, photo, name, birthday, updated_by, updated_at)=($1, $2, $3, $4, to_timestamp(${new Date(birthday).getTime()} / 1000), $5, to_timestamp(${Date.now()} / 1000.0)) WHERE id=$5;`,
+      [email, hashedPassword, photo, name, userid]
     );
     res.status(201).send({
       message: "Usuário editado com sucesso!",
       name: name,
       birthday: birthday,
       email: email,
+      photo: photo
     });
   } catch(e) {
     res.status(500).send({
@@ -69,7 +70,7 @@ exports.edit = async (req, res) => {
   }
 };
 
-exports.data = async (req, res) => {
+exports.view = async (req, res) => {
   try{
     const {id:userid} = req.user;
     const {rows} = await db.query(
