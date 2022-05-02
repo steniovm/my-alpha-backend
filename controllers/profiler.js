@@ -94,7 +94,7 @@ exports.view = async (req, res) => {
         message: "Usuário retornou dados com sucesso!",
         email: user.email,
         name: user.name,
-        birthday: user.birthday,
+        birthday: user.birthday.split("T")[0],
         photo: user.photo
       });
     }
