@@ -6,9 +6,10 @@ const sessions = {};
 
 async function searchUUID (uuid)
 {
+  // AND deleted_at IS NOT NULL
   console.log(`Searching ${uuid}...`)
   const {rows} = await db.query(
-    "SELECT * FROM users WHERE uuid = $1 AND deleted_at IS NOT NULL",
+    "SELECT * FROM users WHERE uuid = $1 AND deleted_at IS NULL",
     [uuid]
   );
   console.log(`Found ${rows.length}!`);
@@ -47,9 +48,12 @@ async function verifyToken (req, res, next)
       });
     }
     const user = await searchUUID(decoded.uuid);
-    console.log(`Verified ${user.email}`);
-    req.user = user;
-    next();
+    if(user)
+    {
+      console.log(`Verified ${user.email}`);
+      req.user = user;
+      next();
+    }
   });
 };
 
