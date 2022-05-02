@@ -66,7 +66,7 @@ checkBirthday = async (req, res, next) => {
   req.body.birthday = birthday;
   next();
 };
-const verifySignUp = {
+const verify = {
   checkDuplicateEmail: checkDuplicateEmail,
   checkPassword: checkPassword,
   checkEmail: checkEmail,
@@ -74,4 +74,4 @@ const verifySignUp = {
   checkUpdateEmail,
   checkUpdatePassword
  };
-module.exports = verifySignUp;
+module.exports = verify;
