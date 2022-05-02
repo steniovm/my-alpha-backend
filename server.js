@@ -2,17 +2,18 @@ require("dotenv").config()
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 const authRoutes = require("./routes/auth.routes");
 const userRoutes = require("./routes/user.routes");
 const app = express();
 
 app.use(cookieParser());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(express.json({ type: 'application/vnd.api+json' }))
+app.use(bodyParser.urlencoded({ limit: "100mb", lextended: true }));
+app.use(bodyParser.json({ limit: "100mb" })) //{ limit: "100mb", type: 'application/vnd.api+json' })
+
 app.use(cors({
     origin:["http://localhost:3000"], //'*', 
-    methods: ['POST', 'PUT', 'GET', 'DELETE' ], //'OPTIONS', 'HEAD'
+    //methods: ['POST', 'PUT', 'GET', 'DELETE' ], //'OPTIONS', 'HEAD'
     credentials: true
 }));
 app.use('/auth', authRoutes);
