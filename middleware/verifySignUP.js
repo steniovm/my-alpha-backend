@@ -54,13 +54,16 @@ checkEmail = async (req, res, next) => {
    next();
 };
 checkBirthday = async (req, res, next) => {
-  const birthday = req.body.birthday;
-  if(!birthday.match(/^\d{4}\/\d{2}\/\d{2}$/)){
-    console.log(birthday);
+  let birthday = req.body.birthday;
+  birthday = birthday.split("T")[0];
+  if(!birthday.match(/^\d{4}\/\d{2}\/\d{2}$/) && !birthday.match(/^\d{4}-\d{2}-\d{2}$/)){
+    //console.log(birthday);
     return res.status(400).send({
-      message: "Data de nascimento inválida!"
+      message: `Data de nascimento inválida! ${birthday}`
     });
   }
+  console.log(birthday);
+  req.body.birthday = birthday;
   next();
 };
 const verifySignUp = {
