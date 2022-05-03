@@ -21,8 +21,8 @@ exports.insert = async (req, res) => {
     const {name, password, birthday, email} = req.body;
     const hashedPassword = bcrypt.hashSync(password, 8);
     const {rows} = await db.query(
-      `INSERT INTO users (email, password, name, birthday, uuid, access_level, created_by, created_at) VALUES ($1, $2, $3, to_timestamp(${new Date(birthday).getTime()} / 1000), $4, $5, $6, to_timestamp(${Date.now()} / 1000.0)) RETURNING *`,
-      [email, hashedPassword, name, crypto.randomUUID(), 0, 0]
+      `INSERT INTO users (email, password, name, birthday, uuid, access_level, created_by, created_at, id_photo) VALUES ($1, $2, $3, to_timestamp(${new Date(birthday).getTime()} / 1000), $4, $5, $6, to_timestamp(${Date.now()} / 1000.0), $7) RETURNING *`,
+      [email, hashedPassword, name, crypto.randomUUID(), 0, 0, 1]
     );
     res.status(201).send({
       message: "Usuário criado com sucesso!",
@@ -95,10 +95,17 @@ exports.editPhoto = async (req, res) => {
   try{
     const {id:userid} = req.user;
     const {photo} = req.body;
-
-    await db.query(
-      `UPDATE users SET (photo, updated_by, updated_at)=($1, $2, to_timestamp(${Date.now()} / 1000.0)) WHERE id=$2;`,
+    const {rows} = await db.query(
+      `INSERT INTO user_photo (image, created_by, created_at) VALUES ($1, $2, to_timestamp(${Date.now()} / 1000.0)) RETURNING *`,
       [photo, userid]
+    );
+    const photoid = rows[0].id;
+    console.log(photoid);
+    await db.query(
+      `
+      UPDATE users SET (id_photo, updated_by, updated_at)=($1, $2, to_timestamp(${Date.now()} / 1000.0)) WHERE id=$2
+      `,
+      [photoid, userid]
     );
     
     res.status(201).send({
@@ -130,7 +137,32 @@ exports.view = async (req, res) => {
         email: user.email,
         name: user.name,
         birthday: ajustDate(user.birthday),
-        photo: user.photo
+        //photoid: user.photoid
+      });
+    }
+  } catch(e) {
+    res.status(500).send({
+      message: e.message
+    });
+  }
+};
+
+exports.viewPhoto = async (req, res) => {
+  try{
+    const {id_photo:photoid} = req.user;
+    const {rows} = await db.query(
+      "SELECT * FROM user_photo WHERE id = $1",
+      [photoid]
+    );
+    if(rows.length === 0) {
+      res.status(401).send({
+        message: "Foto não encontrada!"
+      });
+    } else {
+      const photo = rows[0];
+      res.status(200).send({
+        message: "Foto retornada com sucesso!",
+        photo: photo.image
       });
     }
   } catch(e) {

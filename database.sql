@@ -5,8 +5,8 @@ CREATE TABLE public.users (
 	"password" varchar(120) NOT NULL,
 	"name" varchar(240) NOT NULL,
 	"birthday" DATE NOT NULL,
-	"photo" integer,
-	"uuid" varchar(32) NOT NULL UNIQUE,
+	"id_photo" integer NOT NULL,
+	"uuid" varchar(64) NOT NULL UNIQUE,
 	"access_level" int NOT NULL,
 	"created_by" int NOT NULL,
 	"created_at" TIMESTAMP NOT NULL,
@@ -22,12 +22,16 @@ CREATE TABLE public.users (
 CREATE TABLE public.user_photo (
 	"id" serial NOT NULL,
 	"image" varchar(3095407) NOT NULL,
+	"created_by" int NOT NULL,
+	"created_at" TIMESTAMP NOT NULL,
+	"deleted_by" int,
+	"deleted_at" TIMESTAMP,
 	CONSTRAINT "user_photo_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
 );
 
-ALTER TABLE "users" ADD CONSTRAINT "users_fk0" FOREIGN KEY ("photo") REFERENCES "user_photo"("id");
+ALTER TABLE "users" ADD CONSTRAINT "users_fk0" FOREIGN KEY ("id_photo") REFERENCES "user_photo"("id");
 
 /* CREATE FUNCTION checkemail() RETURNS trigger AS $$
   BEGIN
